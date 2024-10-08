@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:create, :index]
       resources :sessions, only: :create
+      get '/movies/top_rated', to: 'movies#top_rated'
     end
   end
 end
