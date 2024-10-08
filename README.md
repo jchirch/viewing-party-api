@@ -15,3 +15,5 @@ Viewing Party is an application that allows users to explore movies and create a
 Spend some time familiarizing yourself with the functionality and structure of the application so far.
 
 Run the application and test out some endpoints: `rails s`
+
+https://calm-dawn-75890-e1bce695920b.herokuapp.com/ | https://git.heroku.com/calm-dawn-75890.git
