@@ -43,6 +43,30 @@ RSpec.describe "Movie Endpoints" do
       end
       expect(movies.length).to eq(20)
     end
+
+    it "can return movies based on search params" do
+      json_response = File.read('spec/fixtures/movie_search.json')
+      stub_request(:get, "https://api.themoviedb.org/3/movie/search?God&api_key=#{Rails.application.credentials.tmdb[:key]}").
+      with(
+        headers: {
+       'Accept'=>'*/*',
+       'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+       'User-Agent'=>'Faraday v2.10.1'
+        }).
+      to_return(status: 200, body: json_response, headers: {})
+
+      get '/api/v1/movies/search', params: {query: "God"}
+
+      expect(response).to be_successful
+
+      movies = JSON.parse(response.body, symbolize_names: true)[:data]
+
+      movies.each do |movie|
+        expect(movie[:attributes][:title]).to include("God")
+      end
+
+
+    end
   end
 
   describe "sad path" do
