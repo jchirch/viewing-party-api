@@ -17,8 +17,18 @@ class Api::V1::MoviesController < ApplicationController
   def search
     conn = Faraday.new(url: "https://api.themoviedb.org") do |faraday|
       faraday.params['api_key'] = Rails.application.credentials.tmdb[:key]
+      faraday.params['query'] = params[:query]
     end
-    response = conn.get("/3/movie/search?God")
+    response = conn.get("/3/search/movie")
+
+    if response.success?
+     
+      movies = JSON.parse(response.body, symbolize_names: true)[:data]
+      render json: MovieSerializer.format_movie_list(movies.first(20))
+   
+    else
+      render json: {error: "Internal Server Error"}, status: 500
+    end
 
   end
 end
