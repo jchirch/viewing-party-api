@@ -9,7 +9,7 @@ class MovieSerializer
           id: movie[:id],
           type: 'movie',
           attributes: {
-            title: movie[:original_title],
+            title: movie[:title],
             vote_average: movie[:vote_average]
           }
         }
