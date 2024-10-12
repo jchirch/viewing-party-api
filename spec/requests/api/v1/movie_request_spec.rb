@@ -30,6 +30,8 @@ RSpec.describe "Movie Endpoints" do
          to_return(status: 200, body: json_response, headers: {})
 
          get '/api/v1/movies/top_rated'
+        #  get api_v1_users_path
+
 
       expect(response).to be_successful
 
@@ -42,6 +44,10 @@ RSpec.describe "Movie Endpoints" do
         expect(movie[:attributes]).to have_key(:vote_average)
       end
       expect(movies.length).to eq(20)
+    end
+
+    xit 'hits top rated' do
+
     end
 
     it "can return movies based on search params" do
@@ -57,7 +63,7 @@ RSpec.describe "Movie Endpoints" do
       to_return(status: 200, body: json_response, headers: {})
 
       get '/api/v1/search/movie', params: {query: "God"}
-      
+      # require 'pry'; binding.pry
       expect(response).to be_successful
       
       movies = JSON.parse(response.body, symbolize_names: true)[:data]

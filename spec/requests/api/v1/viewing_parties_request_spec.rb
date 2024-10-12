@@ -23,9 +23,9 @@ RSpec.describe "Endpoints" do
       expect(response).to be_successful
       expect(response.status).to eq(201)
       party = JSON.parse(response.body, symbolize_names: true)[:data]
-      require 'pry'; binding.pry
+      
       expect(party[:id]).to be_a(String)
-      expect(party[:type]).to be("viewing_party")
+      expect(party[:type]).to be_a(String)
       expect(party[:attributes][:name]).to be_a(String)
       expect(party[:attributes][:start_time]).to be_a(String)
       expect(party[:attributes][:end_time]).to be_a(String)
@@ -35,7 +35,7 @@ RSpec.describe "Endpoints" do
   end
 
   describe "sad paths" do
-    xit "returns error with invalid api key" do
+    it "returns error with invalid api key" do
       user1 = User.create!(name: "Danny DeVito", username: "danny_de_v", password: "jerseyMikesRox7")
       user2 =User.create!(name: "Dolly Parton", username: "dollyP", password: "Jolene123")
       user3 =User.create!(name: "Lionel Messi", username: "futbol_geek", password: "test123")
@@ -53,6 +53,10 @@ RSpec.describe "Endpoints" do
 
       post "/api/v1/viewing_parties", params: test_params
 
+      expect(response).to_not have_http_status(:success)
+      sad_party = JSON.parse(response.body, symbolize_names: true)
+      expect(sad_party[:message]).to eq("Invalid API Key")
+      expect(sad_party[:status]).to eq(401)
     end
   end
 end

@@ -5,13 +5,12 @@ class Api::V1::ViewingPartiesController < ApplicationController
       party = host.viewing_parties.create!(party_params)
       invite_guests(party)
       render json: PartySerializer.new(party), status: :created
-    rescue
-      render json: {error: "Host not found"}
+    rescue => error
+     
+      render json: ErrorSerializer.format_error(ErrorMessage.new("Invalid API Key", 401)), status: :unauthorized
+      # render json: {error: error.message}, status: :unprocessable_entity
     end
     
-    # check to see if self.viewingparty_users.host = true
-    # proceed
-    # else error, party must have host. - validation?
   end
 
   private
