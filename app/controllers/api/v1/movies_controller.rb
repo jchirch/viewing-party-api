@@ -1,35 +1,24 @@
 class Api::V1::MoviesController < ApplicationController
-  def top_rated
-    conn = Faraday.new(url: "https://api.themoviedb.org") do |faraday|
-      faraday.params['api_key'] = Rails.application.credentials.tmdb[:key]
-    end
-    response = conn.get("/3/movie/top_rated")
 
-    if response.success?
-      movies = JSON.parse(response.body, symbolize_names: true) #[:results]
-      top_20 = movies.first(20)
-      render json: MovieSerializer.format_movie_list(top_20) 
+  def index
+    path = request.path
+    if path == "/api/v1/movies/top_rated"
+      sort_response(MovieGateway.top_rated)
+    elsif path == "/api/v1/search/movie"
+      sort_response(MovieGateway.search(params[:query]))
     else
       render json: {error: "Internal Server Error"}, status: 500
     end
   end
 
-  def search
-    conn = Faraday.new(url: "https://api.themoviedb.org") do |faraday|
-      faraday.params['api_key'] = Rails.application.credentials.tmdb[:key]
-      faraday.params['query'] = params[:query]
-    end
-    response = conn.get("/3/search/movie")
+  private
 
-    if response.success?
-     
-      movies = JSON.parse(response.body, symbolize_names: true)[:data]
-      render json: MovieSerializer.format_movie_list(movies.first(20))
-   
-    else
+  def sort_response(result)
+    if result == nil
       render json: {error: "Internal Server Error"}, status: 500
+    else
+      render json: MovieSerializer.format_movie_list(result)
     end
-
   end
 end
 

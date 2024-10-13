@@ -20,7 +20,7 @@ https://calm-dawn-75890-e1bce695920b.herokuapp.com/ | https://git.heroku.com/cal
 
 should i take my controller methods, turn them into gateway class methods, and call them in my index?
 refactor routes, all tests, etc?
-test that the gateway class method works in the gateway_spec and then test that the request works using the gateway class method iin the request spec? what does in the model class/spec besides validations?
+test that the gateway class method works in the gateway_spec and then test that the request works using the gateway class method in the request spec? what does in the model class/spec besides validations?
 
 is git push heroku main deploying the app?
 
