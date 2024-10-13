@@ -20,4 +20,14 @@ class MovieGateway
     return nil unless response.success?
     movies = JSON.parse(response.body, symbolize_names: true)[:data]
   end
+
+  def self.find_movie(movie_id)
+    conn = Faraday.new(url: "https://api.themoviedb.org") do |faraday|
+      faraday.params['api_key'] = Rails.application.credentials.tmdb[:key]
+    end
+    response = conn.get("/3/movie/#{movie_id}")
+
+    return nil unless response.success?
+    movie = JSON.parse(response.body, symbolize_names: true)
+  end
 end

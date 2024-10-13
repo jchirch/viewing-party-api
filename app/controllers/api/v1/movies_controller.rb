@@ -11,9 +11,20 @@ class Api::V1::MoviesController < ApplicationController
     end
   end
 
+  def show
+    movie_id = params[:id]
+    if movie_id == nil
+      render json: {error: "Movie not found"}, status: 404
+    else
+      render json: MovieDetails.new(MovieGateway.find_movie(movie_id))
+      # render json: MovieGateway.find_movie(movie_id)
+    end
+  end
+
   private
 
   def sort_response(result)
+    
     if result == nil
       render json: {error: "Internal Server Error"}, status: 500
     else

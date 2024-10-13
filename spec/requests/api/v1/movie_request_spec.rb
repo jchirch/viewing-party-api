@@ -60,6 +60,14 @@ RSpec.describe "Movie Endpoints" do
         expect(movie[:attributes][:title]).to include("God")
       end
     end
+
+    it "returns single movie and it's details" do
+      WebMock.allow_net_connect!
+      get "/api/v1/movies/278?api_key=#{Rails.application.credentials.tmdb[:key]}"
+      # require 'pry'; binding.pry
+      expect(response).to be_successful
+
+    end
   end
 
   describe "sad path" do
