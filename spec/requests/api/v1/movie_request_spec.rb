@@ -8,7 +8,7 @@ RSpec.describe "Movie Endpoints" do
       expect(response).to be_successful
 
       movies = JSON.parse(response.body, symbolize_names: true)[:data]
-          require 'pry'; binding.pry
+      
       movies.each do |movie|
         expect(movie).to have_key(:id)
         expect(movie[:type]).to eq('movie')
@@ -18,24 +18,23 @@ RSpec.describe "Movie Endpoints" do
       expect(movies.length).to eq(20)
     end
 
-    it "can retrieve top 20 movies MOCK" do
+    it "returns 20 top rated movies with successful API call" do
       json_response = File.read('spec/fixtures/top_20.json')
       stub_request(:get, "https://api.themoviedb.org/3/movie/top_rated?api_key=#{Rails.application.credentials.tmdb[:key]}").
-         with(
-           headers: {
+        with(
+          headers: {
           'Accept'=>'*/*',
           'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
           'User-Agent'=>'Faraday v2.10.1'
-           }).
-         to_return(status: 200, body: json_response, headers: {})
+          }).
+        to_return(status: 200, body: json_response, headers: {})
 
-         get '/api/v1/movies/top_rated'
-        #  get api_v1_users_path
-
-
+      get '/api/v1/movies/top_rated'
+       
       expect(response).to be_successful
 
       movies = JSON.parse(response.body, symbolize_names: true)[:data]
+      expect(movies.length).to eq(20)
        
       movies.each do |movie|
         expect(movie).to have_key(:id)
@@ -43,27 +42,16 @@ RSpec.describe "Movie Endpoints" do
         expect(movie[:attributes]).to have_key(:title)
         expect(movie[:attributes]).to have_key(:vote_average)
       end
-      expect(movies.length).to eq(20)
-    end
-
-    xit 'hits top rated' do
-
     end
 
     it "can return movies based on search params" do
       json_response = File.read('spec/fixtures/movie_search.json')
       stub_request(:get, "https://api.themoviedb.org/3/search/movie?api_key=#{Rails.application.credentials.tmdb[:key]}&query=God").
-      with(
-        query: {api_key: Rails.application.credentials.tmdb[:key], query: "God"},
-        headers: {
-        'Accept'=>'*/*',
-        'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-        'User-Agent'=>'Faraday v2.10.1'
-        }).
+
       to_return(status: 200, body: json_response, headers: {})
 
       get '/api/v1/search/movie', params: {query: "God"}
-      # require 'pry'; binding.pry
+  
       expect(response).to be_successful
       
       movies = JSON.parse(response.body, symbolize_names: true)[:data]
