@@ -12,7 +12,7 @@ class User < ApplicationRecord
     viewing_party_users.where(user_id: )
   end
 
-  def create_a_party(info)
-require 'pry'; binding.pry
-  end
+#   def create_a_party(info)
+# require 'pry'; binding.pry
+#   end
 end

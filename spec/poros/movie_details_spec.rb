@@ -68,33 +68,5 @@ RSpec.describe MovieDetails do
       runtime_in_minutes = movie_data[:runtime]
       expect(new_movie.to_hours(runtime_in_minutes)).to eq("4 hours, 23 minutes") 
     end
-
-    xit "converts integer to runtime" do
-      stub_request(:get, "https://api.themoviedb.org/3/movie/278/credits?api_key=#{Rails.application.credentials.tmdb[:key]}")
-      .to_return(status: 200, body: { cast: [] }.to_json, headers: { 'Content-Type' => 'application/json' })
-
-      stub_request(:get, "https://api.themoviedb.org/3/movie/278/reviews?api_key=#{Rails.application.credentials.tmdb[:key]}")
-      .to_return(status: 200, body: { results: [] }.to_json, headers: { 'Content-Type' => 'application/json' })
-
-      movie_data = data = {
-        id: 123,
-        title: "A Big Movie",
-        release_date: "2024-10-13", 
-        vote_average: 8.5,
-        runtime: 263,
-        genres: [
-          { name: "Action" },
-          { name: "Adventure" }
-        ],
-        description: "It was a normal day until it wasn't.",
-        cast: ["John Doe", "Jane Doe"],
-        review_count: 5,
-        reviews: ["Great!", "Good!"]
-      }
-
-      new_movie = MovieDetails.new(movie_data)
-      runtime_in_minutes = 263
-      expect(new_movie.to_hours(runtime_in_minutes)).to eq("4 hours, 23 minutes")
-    end
   end
 end
