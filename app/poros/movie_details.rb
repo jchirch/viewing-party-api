@@ -10,7 +10,6 @@ class MovieDetails
               :review_count,
               :reviews
   def initialize(data)
-    require 'pry'; binding.pry
     @id = data[:id]
     @title = data[:title]
     @release_year = data[:release_date].split('-').first
@@ -22,7 +21,6 @@ class MovieDetails
     @reviews = find_reviews(data[:id]) 
   end
 
-
   def to_hours(runtime)
     hours = runtime / 60
     minutes = runtime % 60
@@ -30,11 +28,10 @@ class MovieDetails
   end
 
   def find_cast(movie_id)
-
+    MovieGateway.find_cast(movie_id)
   end
 
   def find_reviews(movie_id)
-    
+    MovieGateway.find_reviews(movie_id)
   end
-
 end

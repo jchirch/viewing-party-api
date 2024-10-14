@@ -30,6 +30,43 @@ RSpec.describe MovieGateway do
         expect(movie[:title]).to include("God")
       end
     end
+
+    it "#find_movie" do
+      WebMock.allow_net_connect!
+      shawshank_id = 278
+      result = MovieGateway.find_movie(shawshank_id)
+
+      expect(result[:id]).to eq(278)
+      expect(result[:title]).to eq("The Shawshank Redemption")
+      expect(result[:vote_average]).to be_a(Float)
+      expect(result[:runtime]).to be_a(Integer)
+      expect(result[:genres]).to be_an(Array)
+      expect(result[:overview]).to be_a(String)
+    end
+
+    it "#find_cast" do
+      WebMock.allow_net_connect!
+      shawshank_id = 278
+      cast = MovieGateway.find_cast(shawshank_id)
+
+      expect(cast.length).to be <= 10
+      cast.each do |cast_member|
+        expect(cast_member).to have_key(:actor)
+        expect(cast_member).to have_key(:character)
+      end
+    end
+
+    it "#find_reviews" do
+      WebMock.allow_net_connect!
+      shawshank_id = 278
+      reviews = MovieGateway.find_reviews(shawshank_id)
+      expect(reviews.length).to be <=5
+
+      reviews.each do |review|
+        expect(review).to have_key(:author)
+        expect(review).to have_key(:review)
+      end
+    end
   end
 
   describe "sad paths" do
@@ -46,8 +83,26 @@ RSpec.describe MovieGateway do
       result = MovieGateway.search("God")
       expect(result).to be(nil)
     end
-  end
-  it "returns movie object with descriptions" do
-    
-  end
+  
+    it "#find_movie returns nil with invalid movie ID" do
+      fake_id = 0
+      bootleg = MovieGateway.find_movie(fake_id)
+
+      expect(bootleg).to be_nil
+    end
+
+    it "#find_cast returns nil with invalid movie ID" do
+      fake_id = 0
+      bootleg = MovieGateway.find_cast(fake_id)
+
+      expect(bootleg).to be_nil
+    end
+
+    it "#find_reviews returns nil with invalid movie ID" do
+      fake_id = 0
+      bootleg = MovieGateway.find_reviews(fake_id)
+
+      expect(bootleg).to be_nil
+    end
+  end 
 end

@@ -64,7 +64,7 @@ RSpec.describe "Movie Endpoints" do
     it "returns single movie and it's details" do
       WebMock.allow_net_connect!
       get "/api/v1/movies/278?api_key=#{Rails.application.credentials.tmdb[:key]}"
-      # require 'pry'; binding.pry
+       require 'pry'; binding.pry
       expect(response).to be_successful
 
     end

@@ -17,7 +17,6 @@ class Api::V1::MoviesController < ApplicationController
       render json: {error: "Movie not found"}, status: 404
     else
       render json: MovieDetails.new(MovieGateway.find_movie(movie_id))
-      # render json: MovieGateway.find_movie(movie_id)
     end
   end
 
