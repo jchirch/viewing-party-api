@@ -2,22 +2,6 @@ require "rails_helper"
 
 RSpec.describe "Movie Endpoints" do
   describe "happy path" do
-    # xit "can retrieve top 20 highest rated movies FROM API" do
-    #   WebMock.allow_net_connect!
-    #   get '/api/v1/movies/top_rated'
-
-    #   expect(response).to be_successful
-
-    #   movies = JSON.parse(response.body, symbolize_names: true)[:data]
-      
-    #   movies.each do |movie|
-    #     expect(movie).to have_key(:id)
-    #     expect(movie[:type]).to eq('movie')
-    #     expect(movie[:attributes]).to have_key(:title)
-    #     expect(movie[:attributes]).to have_key(:vote_average)
-    #   end
-    #   expect(movies.length).to eq(20)
-    # end
 
     it "returns 20 top rated movies with successful API call" do
       json_response = File.read('spec/fixtures/top_20.json')
@@ -117,13 +101,6 @@ RSpec.describe "Movie Endpoints" do
         error_response = JSON.parse(response.body, symbolize_names: true)
         expect(error_response[:error]).to eq("Internal Server Error")
     end
-
-    # xit "returns error from failed index action" do
-    #   get '/api/v1/movies/invalid_route'
-    #   require 'pry'; binding.pry
-    #   expect(response.status).to eq(500)
-    #   expect(JSON.parse(response.body)['error']).to eq('Internal Server Error')
-    # end
 
     it "returns error from failed search action" do
       get '/api/v1/search/movie'

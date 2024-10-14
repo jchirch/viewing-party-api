@@ -17,5 +17,3 @@ class MovieSerializer
   }
   end
 end
-
-# data: movies.take(20).map do |movie|

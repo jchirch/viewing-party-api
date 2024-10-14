@@ -8,9 +8,7 @@ class Api::V1::ViewingPartiesController < ApplicationController
     rescue => error
      
       render json: ErrorSerializer.format_error(ErrorMessage.new("Invalid API Key", 401)), status: :unauthorized
-      # render json: {error: error.message}, status: :unprocessable_entity
     end
-    
   end
 
   private
