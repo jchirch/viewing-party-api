@@ -10,6 +10,7 @@ class MovieDetails
               :review_count,
               :reviews
   def initialize(data)
+    
     @id = data[:id]
     @title = data[:title]
     @release_year = data[:release_date].split('-').first

@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "Movie Endpoints" do
   describe "happy path" do
     xit "can retrieve top 20 highest rated movies FROM API" do
+      WebMock.allow_net_connect!
       get '/api/v1/movies/top_rated'
 
       expect(response).to be_successful
@@ -64,9 +65,37 @@ RSpec.describe "Movie Endpoints" do
     it "returns single movie and it's details" do
       WebMock.allow_net_connect!
       get "/api/v1/movies/278?api_key=#{Rails.application.credentials.tmdb[:key]}"
-       require 'pry'; binding.pry
+  
       expect(response).to be_successful
 
+      movie = JSON.parse(response.body, symbolize_names: true)
+
+      expect(movie).to have_key(:id)
+      expect(movie[:id]).to be_an(Integer)
+
+      expect(movie).to have_key(:title)
+      expect(movie[:title]).to be_a(String)
+
+      expect(movie).to have_key(:release_year)
+      expect(movie[:release_year]).to be_a(String)
+
+      expect(movie).to have_key(:runtime)
+      expect(movie[:runtime]).to be_a(String)
+
+      expect(movie).to have_key(:genres)
+      expect(movie[:genres]).to be_an(Array)
+
+      expect(movie).to have_key(:description)
+      expect(movie[:description]).to be_a(String)
+
+      expect(movie).to have_key(:cast)
+      expect(movie[:cast]).to be_an(Array)
+
+      expect(movie).to have_key(:review_count)
+      expect(movie[:review_count]).to be_an(Integer)
+
+      expect(movie).to have_key(:reviews)
+      expect(movie[:reviews]).to be_an(Array)
     end
   end
 
